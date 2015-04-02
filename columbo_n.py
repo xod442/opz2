@@ -155,11 +155,11 @@ def main():
   pagevar2 = "MAC address(es)"
   pagevar3 = "This is the requested information from the IMC server"
   printhead(pagevar1, pagevar2, pagevar3, host)
-
+  # Process each MAC one at a time
   for item in macz:
     macAdd = macz[counter].strip()
     api_url='http://{}/imcrs/res/access/realtimeLocate?type=1&value={}'.format(host,macAdd)
-    
+    # HTTP GET API results converted to python Dictionary
     try:
       auth=HTTPDigestAuth(user,passwd)
       r = requests.get(api_url, auth=auth)
@@ -173,32 +173,42 @@ def main():
       printpage(pagevar1, pagevar2, user, passwd)
       sys.exit()
     
-    # Assign variables from locate API call    
-    devIp = my_dict['list']['realtimeLocation']['deviceIp']
-    devInt = my_dict['list']['realtimeLocation']['ifDesc']
-    deviceId = my_dict['list']['realtimeLocation']['deviceId']
+    # check for data in return string
+    if my_dict['list']: 
+      # Assign variables from the realtimelocate API call    
+      devIp = my_dict['list']['realtimeLocation']['deviceIp']
+      devInt = my_dict['list']['realtimeLocation']['ifDesc']
+      deviceId = my_dict['list']['realtimeLocation']['deviceId']
     
-    # Get device location information
+      # Get device location information
     
-    ip_url='http://{}/imcrs/plat/res/device/{}'.format(host,deviceId)
+      ip_url='http://{}/imcrs/plat/res/device/{}'.format(host,deviceId)
     
-    try:
-      auth=HTTPDigestAuth(user,passwd)
-      r = requests.get(ip_url, auth=auth)
-      my_dev = xmltodict.parse(r.text)
+      try:
+        auth=HTTPDigestAuth(user,passwd)
+        r = requests.get(ip_url, auth=auth)
+        my_dev = xmltodict.parse(r.text)
   
-    except:
-      pagevar1 = "Connection Alert"
-      pagevar2 = "System Connection failure"
-      pagevar3 = "There has been an error connecting to the IMC target"
-      pagevar4 = "Check supplied credentials and try again"
-      printpage(pagevar1, pagevar2, user, passwd)
-      sys.exit()
+      except:
+        pagevar1 = "Connection Alert"
+        pagevar2 = "System Connection failure"
+        pagevar3 = "There has been an error connecting to the IMC target"
+        pagevar4 = "Check supplied credentials and try again"
+        printpage(pagevar1, pagevar2, user, passwd)
+        sys.exit()
     
-    devName = my_dev['device']['sysName']
-    contact = my_dev['device']['contact']
-    devLoc = my_dev['device']['location']
-    
+      devName = my_dev['device']['sysName']
+      contact = my_dev['device']['contact']
+      devLoc = my_dev['device']['location']  
+      
+    else: 
+        
+      devIp = 'MAC not found'
+      devInt = 'MAC not found'
+      deviceId = 'MAC not found'
+      devName = 'MAC not found'
+      contact = 'MAC not found'
+      devLoc = 'MAC not found'   
     
     #Print table row
     print ("<tr>")
