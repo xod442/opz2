@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="Author" CONTENT="Chewie">
+<title>Wookieware.com</title>
+<link rel="stylesheet" type="text/css" href="./css/tasks.css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
+<body>
+	<header>
+		<span>Find MAC addresses with IMC</span>
+	</header>
+	<main>
+	<section id="collectVars">
+		<form method='post' ACTION="./cgi-bin/columbo_n.py">
+			<div>
+				<label>IMC Server IP:</label> <input type="text" required="required"
+					name="host" class="large" placeholder="10.132.0.108:8080" />
+			</div>
+			<div>
+				<label>User:</label> <input type="text" required="required"
+					name="user" class="large"  />
+			</div>
+			<div>
+				<label>Password:</label> <input type="password" required="required"
+					name="passwd" class="large" />
+			</div>
+			<div id="macList">
+				<label>Address(es):</label> <textarea required="required"
+					name="macz" rows=10 cols=30 boder=2 placeholder="aa:bb:cc:dd:ee:ff,aa:bb:cc:dd:ee:ff" class="large"></textarea>
+			</div>
+		
+			<nav>
+				<input type="submit" style="font-face: 'Comic Sans MS'; font-size: larger; color: black; background-color: #0066FF; border: 3pt ridge lightgrey" value="Submit">
+			</nav>
+		</form>
+	</section>
+	
+	</main>
+	<footer>
+	  <p>Connected API Solutions from wookieware.com 2015</p>
+	</footer>
+</body>
+<script>
+	$('[required="required"]').prev('label').append( '<span>*</sapn>').children(
+'span').addClass('required');
+</script>
+</html>
